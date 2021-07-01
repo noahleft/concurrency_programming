@@ -11,3 +11,7 @@ Difference between Concurrency and Parallel:
 
 Why is it important?
 - Obviously, we love performance speed-up.
+
+The basic idea of Concurrency
+- task decomposition
+- data decomposition
