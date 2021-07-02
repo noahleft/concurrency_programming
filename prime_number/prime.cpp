@@ -27,21 +27,26 @@ static bool is_prime(int t) {
 }
 
 int cal_prime_number_under_n(int n) {
-    vector<int> prime_vec;
+    int num = 0;
     for(int i=2; i<=n ;i++) {
         if(is_prime(i)) {
-            prime_vec.push_back(i);
+            num++;
         }
     }
-    return prime_vec.size();
+    return num;
 }
 #elif defined(v3)
 #include <pthread.h>
 #define NUM_THREADS 4
 pthread_mutex_t gLock;
-int num;
 
-vector<int> prime_vec;
+typedef struct thread_param
+{
+    int seed;
+    int terminate_number;
+    int result;
+} tparam_t;
+
 static bool is_prime(int t) {
     for(int i=2; i<=t/2; i++) {
         if(t%i==0) return false;
@@ -50,34 +55,34 @@ static bool is_prime(int t) {
 }
 
 void *threadFunc(void *pArg) {
-    int i = *((int *)pArg);
-    for(; i<=num ;i+=NUM_THREADS) {
+    int seed = ((tparam_t *)pArg)->seed;
+    int term = ((tparam_t *)pArg)->terminate_number;
+    int num = 0;
+    for(int i = seed; i<=term ;i+=NUM_THREADS) {
         if(is_prime(i)) {
-            pthread_mutex_lock(&gLock);
-            prime_vec.push_back(i);
-            pthread_mutex_unlock(&gLock);
+            num++;
         }
     }
+    ((tparam_t *)pArg)->result = num;
     return NULL;
 }
 
 int cal_prime_number_under_n(int n) {
-    num = n;
     pthread_t tHandles[NUM_THREADS];
-    int tNum[NUM_THREADS];
-    pthread_mutex_init(&gLock, NULL);
+    tparam_t tParam[NUM_THREADS];
 
     for(int i=0; i<NUM_THREADS; i++) {
-        tNum[i] = 2+i;
-        pthread_create(&tHandles[i], NULL, threadFunc, (void*) &tNum[i]);
+        tParam[i].seed = 2+i;
+        tParam[i].terminate_number = n;
+        pthread_create(&tHandles[i], NULL, threadFunc, (void*) &tParam[i]);
     }
 
+    int num = 0;
     for(int j=0; j<NUM_THREADS; j++) {
         pthread_join(tHandles[j], NULL);
+        num+=tParam[j].result;
     }
-
-    pthread_mutex_destroy(&gLock);
-    return prime_vec.size();
+    return num;
 }
 #endif
 
