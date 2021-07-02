@@ -13,7 +13,7 @@ prog_algo: $(cxx_source)
 	time ./$@
 
 prog_pthread: $(cxx_source)
-	g++ -std=c++11 -Dv3 $^ -lpthread -o $@
+	g++ -Dv3 $^ -lpthread -o $@
 	time ./$@
 
 clean:

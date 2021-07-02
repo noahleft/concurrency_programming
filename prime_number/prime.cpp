@@ -38,7 +38,6 @@ int cal_prime_number_under_n(int n) {
 #elif defined(v3)
 #include <pthread.h>
 #define NUM_THREADS 4
-pthread_mutex_t gLock;
 
 typedef struct thread_param
 {
