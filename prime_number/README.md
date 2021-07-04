@@ -26,7 +26,7 @@ Complete the function int cal_prime_number_under_n(int n)
         # of prime number under 1000000 : 78498
             72.73 real       137.42 user         0.72 sys
 
-**Version4: sieve algorithm**
+**Version4: [sieve algorithm](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)**
 - if m is prime number, then composite of m are NOT prime number.
  
         g++ -Dsieve_v1 main.cpp prime.cpp sieve.cpp -o prog_sieve
