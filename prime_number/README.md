@@ -42,7 +42,7 @@ Complete the function int cal_prime_number_under_n(int n)
         # of prime number under 100000000 : 5761455
             10.43 real         9.73 user         0.06 sys
 **Version6: lock-free algo on task function**
-- if m is prime number, then composite of m are NOT prime number.
+- no matter m is prime number or not, the composite of m are NOT prime number with m>1.
 - threading m = [4k, 4k+1, 4k+2, 4k+3]
 
         g++ -std=c++11 -Dsieve_v3 main.cpp prime.cpp sieve.cpp -o prog_sieve_task_thread
