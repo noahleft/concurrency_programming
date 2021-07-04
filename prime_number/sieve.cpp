@@ -50,17 +50,12 @@ int cal_prime_number_under_n(int n) {
 vector<bool> prime_vec;
 
 void filterout_composite_number(int base) {
-    for(int j=2*base; j<prime_vec.size(); j+=base) {
-        prime_vec[j] = false;
+    for(; base<prime_vec.size(); base+=NUM_THREADS) {
+        if(!prime_vec[base]) continue;
+        for(int j=2*base; j<prime_vec.size(); j+=base) {
+            prime_vec[j] = false;
+        }
     }
-}
-
-static int get_prime(int term) {
-    static int idx = 0;
-    for(idx++; idx<term; idx++) {
-        if(prime_vec[idx]) return idx;
-    }
-    return 0;
 }
 
 int cal_prime_number_under_n(int n) {
@@ -70,20 +65,8 @@ int cal_prime_number_under_n(int n) {
 
     vector<thread> tHandles(NUM_THREADS);
 
-    int base;
-    while(1) {
-        base=get_prime(n);
-        if(base==0) break;
-        for(int i=0;; i++) {
-            if(!tHandles[i].joinable()) {
-                tHandles[i] = thread(filterout_composite_number, base);
-                break;
-            }
-            if(i==3) {
-                tHandles[3].join();
-                i=-1;
-            }
-        }
+    for(int i=0; i<NUM_THREADS; i++) {
+        tHandles[i] = thread(filterout_composite_number, i);
     }
 
     for(int j=0; j<NUM_THREADS; j++) {
