@@ -19,7 +19,7 @@ Complete the function int cal_prime_number_under_n(int n)
             128.62 real       121.48 user         1.31 sys
 **Version3: lock-free algo on task independent algo**
 - if m is prime number, then none of number less than m is a product of m.
-- threading 4k, 4k+1, 4k+2, 4k+3
+- threading m = [4k, 4k+1, 4k+2, 4k+3]
 
         g++ -Dv3 main.cpp prime.cpp -lpthread -o prog_pthread
         time ./prog_pthread
