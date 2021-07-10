@@ -70,6 +70,8 @@ int cal_prime_number_under_n(int n) {
     vector<tparam_t> tParams(NUM_THREADS);
 
     for(int i=0; i<NUM_THREADS; i++) {
+        // thread parameter initialization
+        // Be aware that data complexity is O(n) for each thread.
         tParams[i].prime_vec.resize(n+1, true);
         tParams[i].prime_vec[0] = false;
         tParams[i].prime_vec[1] = false;
@@ -81,6 +83,7 @@ int cal_prime_number_under_n(int n) {
         tHandles[j].join();
     }
 
+    // reduce: combine the thread data
     vector<bool> prime_vec;
     prime_vec.resize(n+1, true);
     for(int i=0; i<prime_vec.size(); i++) {
